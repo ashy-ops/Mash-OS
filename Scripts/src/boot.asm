@@ -2,7 +2,6 @@
 mov [BOOT_DISK],dl    ;Storing the boot-drive
 ;Store it at the very top as any bios interrupt may overwrite it
 
-
 CODE_SEG equ 0x08       ;Used for execution of code
 DATA_SEG equ 0x10       ;Used whenever we read or write memory
 
@@ -123,7 +122,7 @@ done:
 
 ;---------------------DECLARATIONS-----------------------------------
 msg16_bit:
-  db "ASH-OS 1.1.0",0
+  db "MASH-OS 1.1.0",0
 
 BOOT_DISK:
   db 0

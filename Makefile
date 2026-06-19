@@ -25,7 +25,7 @@ OS_IMAGE   := $(BIN_DIR)/os.img
 C_SOURCES   := $(shell find $(SRC_DIR) -name '*.c')
 ASM_SOURCES := $(shell find $(SRC_DIR) -name '*.asm' ! -name 'boot.asm')
 OBJECTS     := $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(C_SOURCES)) \
-               $(patsubst $(SRC_DIR)/%.asm, $(BUILD_DIR)/%.o, $(ASM_SOURCES))
+               $(patsubst $(SRC_DIR)/%.asm, $(BUILD_DIR)/%.asm.o, $(ASM_SOURCES))
 
 
 # Force rebuild if headers change
@@ -60,10 +60,9 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Pattern: ASM files
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.asm
+$(BUILD_DIR)/%.asm.o: $(SRC_DIR)/%.asm
 	@mkdir -p $(dir $@)
 	$(ASM) -f elf32 $< -o $@
-
 clean:
 	rm -rf $(BUILD_DIR) $(BIN_DIR)
 

@@ -7,22 +7,22 @@ global inb
 global io_wait
 
 outb:
-  mov dx,[esp + 4]  ;Storing the PORT number from the stack into the dx register
-  mov al,[esp + 8]  ;Storing the VALUE from the stack into the al register
+  mov edx,[esp + 4]  ;Storing the PORT number from the stack into the dx register
+  mov eax,[esp + 8]  ;Storing the VALUE from the stack into the al register
 
   out dx, al
   ret
 
 inb:
-  mov dx,[esp + 4]  ;Storing the PORT number from the stack into the dx register
+  mov edx,[esp + 4]  ;Storing the PORT number from the stack into the dx register
   in al,dx          ;Reading the byte from the PORT into al
 
   ;Note in C calling convention the return value is always put in the EAX/AL register
   ret
 
 io_wait:
-  mov dx,0x80
-  mov al,0
+  mov edx,0x80
+  mov eax,0
 
   out dx,al
   ret

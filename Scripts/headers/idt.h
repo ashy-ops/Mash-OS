@@ -8,8 +8,8 @@ typedef struct
 {
   uint16_t BaseLow;
   uint16_t segment_selector;
-  uint8_t attributes;
   uint8_t reserved;
+  uint8_t attributes;
   uint16_t BaseHigh;
 
 }__attribute__((packed)) IDT_ENTRY;
@@ -58,4 +58,6 @@ typedef enum
 void IDT_SET_GATE(uint8_t interrupt, uint16_t BaseLow, uint8_t segment_selector, uint8_t attributes, uint16_t BaseHigh);
 void INITIALIZE_IDT();
 
+void IDT_GATE_ENABLE(uint8_t interrupt);
+void IDT_GATE_DISABLE(uint8_t interrupt);
 

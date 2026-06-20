@@ -1,5 +1,7 @@
 #include <stdint.h>
 #include "idt.h"
+#include "isr.h"
+
 
 static IDT_ENTRY IDT_TABLE[IDT_MAX_DESCRIPTORS];
 
@@ -18,17 +20,21 @@ void IDT_SET_GATE(uint8_t interrupt, uint16_t BaseLow, uint8_t segment_selector,
   IDT_TABLE[interrupt].BaseHigh = BaseHigh;
 }
 
-static inline void IDT_GATE_ENABLE(uint8_t interrupt)
+void IDT_GATE_ENABLE(uint8_t interrupt)
 {
   IDT_TABLE[interrupt].attributes |= 0x80;
 }
-
-static inline void IDT_GATE_DISABLE(uint8_t interrupt)
+void IDT_GATE_DISABLE(uint8_t interrupt)
 {
   IDT_TABLE[interrupt].attributes &= ~0x80;
 }
 
 void INITIALIZE_IDT()
 {
+  for(int i=0; i< IDT_MAX_DESCRIPTORS;i++)
+  {
+    IDT_SET_GATE(i,0,0,0,0);
+  }
+  ISR_Initialize();
   LOAD_IDT(&IDTR_P);
 }

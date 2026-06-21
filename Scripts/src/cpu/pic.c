@@ -37,5 +37,4 @@ void pic_remap(void) {
     //outb(PIC1_DATA, 0xFE);
     //outb(PIC2_DATA, 0xFF);
 
-
 }

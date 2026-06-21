@@ -7,24 +7,42 @@ global inb
 global io_wait
 
 outb:
-  mov edx,[esp + 4]  ;Storing the PORT number from the stack into the dx register
-  mov eax,[esp + 8]  ;Storing the VALUE from the stack into the al register
+  push ebp
+  mov ebp,esp
+
+  mov edx,[esp + 8]  ;Storing the PORT number from the stack into the dx register
+  mov eax,[esp + 12]  ;Storing the VALUE from the stack into the al register
+
 
   out dx, al
+
+  mov esp,ebp
+  pop ebp
   ret
 
 inb:
-  mov edx,[esp + 4]  ;Storing the PORT number from the stack into the dx register
+  push ebp
+  mov ebp,esp
+
+  mov edx,[esp + 8]  ;Storing the PORT number from the stack into the dx register
   in al,dx          ;Reading the byte from the PORT into al
 
-  ;Note in C calling convention the return value is always put in the EAX/AL register
+  ;Note in CDECL calling convention the return value is always put in the EAX/AL register
+  mov esp,ebp
+  pop ebp
   ret
 
 io_wait:
+  push ebp
+  mov ebp,esp
+
   mov edx,0x80
   mov eax,0
 
   out dx,al
+
+  mov esp,ebp
+  pop ebp
   ret
 
 ;Note that the stack grows downwards, whenever we call a function in C weather its in assembly
@@ -32,3 +50,4 @@ io_wait:
 ;and after all the parameters are pushed, it pushes the return address onto the stack
 ;Since the stack grows downwards we add +4 and +8 to get the values
 ;Doing +8 assuming that we pass the port paramter first in our C function definition
+;Following the standard cdecl calling convention

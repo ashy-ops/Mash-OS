@@ -1,6 +1,4 @@
-#ifndef PIC_H
-#define PIC_H
-
+#pragma once
 // Hardware Port Defines
 #define PIC1_COMMAND 0x20
 #define PIC1_DATA    0x21
@@ -15,7 +13,5 @@
 #define ICW4_8086       0x01    // 8086/88 mode instruction bit
 
 void pic_remap(void);
-void mask_line(void);
-void unmask_line(void);
-
-#endif
+void mask_line();
+void unmask_line();

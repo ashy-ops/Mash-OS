@@ -23,7 +23,7 @@ start_bootloader:
 load_e820:
   mov ax,0x9000
   mov es,ax
-  mov di,0x0001
+  mov di,0x0
   
   xor ebx,ebx
 
@@ -67,7 +67,7 @@ load_e820:
   ;Stores the value in dx register
   
   mov bx,dx
-  add bx, 18*3  ;3seconds approx
+  add bx, 18*1  ;1seconds approx
 
 
 
@@ -134,8 +134,8 @@ init_pm:
   mov ebp,0x90000
   mov esp,ebp
 
-  mov al,[ENTRY_COUNT]
-  mov [MULTI_BOOT_ENTRY_COUNT],al
+  ;mov al,[ENTRY_COUNT]
+  ;mov [MULTI_BOOT_ENTRY_COUNT],al
   jmp CODE_SEG:KERNEL_STUB ;Jump to the kernel entry stub
 
 ;---------------------GDT---------------------------------------

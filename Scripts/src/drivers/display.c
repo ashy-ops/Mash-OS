@@ -61,7 +61,7 @@ void puts(const char* s)
     s++;
   }
 }
-void puti(int i)
+void puti(uint32_t i)
 {
   if(i<0)
   {

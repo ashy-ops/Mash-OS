@@ -3,6 +3,7 @@ CC      := i686-elf-gcc
 ASM     := nasm
 LD      := ld
 OBJCOPY := objcopy
+LIBGCC := $(shell $(CC) -print-libgcc-file-name)
 
 #FLAGS
 #Note that -IScripts/headers is added which tells the compiler to look for files in -IScripts/headers
@@ -53,7 +54,7 @@ $(KERNEL_BIN): $(KERNEL_ELF)
 # Rule: Link ELF
 $(KERNEL_ELF): $(OBJECTS)
 	@mkdir -p $(BUILD_DIR)
-	$(LD) $(LDFLAGS) -o $@ $(OBJECTS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJECTS) $(LIBGCC)
 
 # Pattern: C files
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS)

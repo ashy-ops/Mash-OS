@@ -4,7 +4,7 @@
 #include "display.h"
 
 #define ENTRY_COUNT 0x90000
-#define MEMORMY_MAP 0x90000
+#define MEMORMY_MAP 0x90010
 
 
 volatile char* VGA_BUFFER = (volatile char*)0xB8000;
@@ -24,7 +24,7 @@ void kernel_main()
   INITIALIZE_IDT(); 
   terminal_initialize();
   write_to_terminal("----------------------------------------------",WHITE);
-  write_to_terminal("Displaying Memory Info: ",WHITE);
+  write_to_terminal("Displaying Memory Info!: ",WHITE);
   write_to_terminal("----------------------------------------------",WHITE);
 
 
@@ -33,18 +33,15 @@ void kernel_main()
 
   write_to_terminal("Entry Count is:%i",WHITE,count);
   write_to_terminal("Struct size is:%i",WHITE,sizeof(MemoryMapEntry));
-  for(int i=0;i<6;i++)
+  for(int i=0;i<count;i++)
   {
   
     uint64_t ba = mem[i].baseAddress;
     uint64_t len = mem[i].length;
     uint32_t type = mem[i].type;
     uint32_t acpi = mem[i].acpi;
-    uint64_t *strt_adr = &mem[i].baseAddress;
 
-    write_to_terminal("Base:%h, Length:%h, Type:%i,ACPI:%i",WHITE,ba,len,type,acpi,strt_adr);
-
-    write_to_terminal("Start Addr: %h",WHITE,&mem[i].baseAddress);
+    write_to_terminal("Base:%llx, Length:%llx, Type:%u,ACPI:%u",WHITE,ba,len,type,acpi);
   }
   write_to_terminal("----------------------------------------------",WHITE);
 

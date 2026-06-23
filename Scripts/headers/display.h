@@ -10,8 +10,17 @@
 #define VGA_MEMORY  0xB8000 
 
 #define MAX_BUFFER_SIZE 80*25
-#define NORMAL 0
-#define SPECIFIER 1
+#define STATE_NORMAL 0
+#define STATE_LENGTH 1
+#define STATE_LENGTH_S 2    //on first h aka %h
+#define STATE_LENGTH_L 4    //on first l aka %l
+#define STATE_SPECIFIER 5
+
+#define LEN_DEF 0 //32-bit 
+#define LEN_SS  1 //8-bit char sized
+#define LEN_S   2 //16-bit short
+#define LEN_L   3 //32-bit long 
+#define LEN_LL  4 //64-bit long long
 
 extern size_t cur_row;
 extern size_t cur_column;
@@ -40,10 +49,16 @@ enum vga_color {
 };
 
 
+// void puti(int32_t i);
+// void puts(int16_t i);
+// void putS(uint16_t i);
+
+
 void putc(const char c);
 void puts(const char* s);
-void puti(uint32_t i);
-void puth(uint64_t n);
+void print_num(va_list* args,uint8_t len,bool sign,uint8_t radix);
+// void puti(int i);
+// void puth(uint64_t n);
 
 void scroll();
 void terminal_initialize(void);

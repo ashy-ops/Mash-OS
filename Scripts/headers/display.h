@@ -15,6 +15,7 @@
 #define STATE_LENGTH_S 2    //on first h aka %h
 #define STATE_LENGTH_L 4    //on first l aka %l
 #define STATE_SPECIFIER 5
+#define STATE_SPECIAL 6
 
 #define LEN_DEF 0 //32-bit 
 #define LEN_SS  1 //8-bit char sized

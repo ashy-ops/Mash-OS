@@ -1,5 +1,6 @@
 #include "io.h"
 #include "pic.h"
+#include "display.h"
 
 void pic_remap(void) {
 
@@ -32,6 +33,7 @@ void pic_remap(void) {
     //Set to 0x00 to enable all hardware lines
     outb(PIC1_DATA, 0x00);
     outb(PIC2_DATA, 0x00);
+    write_to_terminal("PIC INITIALIZED!",WHITE);
 
     //Masking all hardware interrupts
     //outb(PIC1_DATA, 0xFE);

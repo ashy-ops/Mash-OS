@@ -35,9 +35,9 @@ void putc(const char c)
   uint8_t entry_colors = vga_entry_color(text_color,terminal_color);
   terminal_buffer[cursor] = vga_entry(c,entry_colors);
 
-  cur_column++;
-  
+  cur_column++;  
 }
+
 
 void puts(const char* s)
 {
@@ -54,11 +54,13 @@ void terminal_initialize(void)
 
   for(size_t y = 0; y<VGA_HEIGHT; y++)
   {
+    
     for(size_t x = 0; x<VGA_WIDTH; x++)
     {
       const size_t indx = y*VGA_WIDTH + x;
       terminal_buffer[indx] = vga_entry(' ',vga_entry_color(terminal_color,terminal_color));
     }
+  
   }
   
   write_to_terminal("Hello from the OS!",WHITE);
@@ -71,7 +73,6 @@ void terminal_initialize(void)
 %hd - short(2 byte)
 %hu - Ushort(2 byte)
 %hh - char sized(1 byte)
-
 */
 
 void write_to_terminal(const char* str,enum vga_color color, ...)
@@ -88,6 +89,7 @@ void write_to_terminal(const char* str,enum vga_color color, ...)
   {
     switch (state)
     {
+
       case STATE_NORMAL:
         switch(*str)
         {
@@ -97,6 +99,7 @@ void write_to_terminal(const char* str,enum vga_color color, ...)
           default: putc(*str);
                     break;
         }
+
         break;
       
       case STATE_LENGTH:
@@ -140,7 +143,8 @@ void write_to_terminal(const char* str,enum vga_color color, ...)
       
       
         
-      case STATE_SPECIFIER: 
+      case STATE_SPECIFIER:
+
         PRINT_STATE_SPECIFIER:
 
         switch(*str)

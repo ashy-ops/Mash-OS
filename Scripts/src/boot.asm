@@ -34,9 +34,7 @@ load_e820:
   int 0x15
 
   jc .error
-  mov al, 'A'
-  mov ah, 0x0E
-  int 0x10
+
 
   add [ENTRY_COUNT],1
   add di,24

@@ -2,6 +2,7 @@
 #include "pic.h"
 #include "idt.h"
 #include "display.h"
+#include "bitmap.h"
 
 #define ENTRY_COUNT 0x90000
 #define MEMORMY_MAP 0x90010
@@ -20,9 +21,10 @@ typedef struct __attribute__((packed)) {
 void kernel_main()
 {
   
+
+  terminal_initialize();
   pic_remap();
   INITIALIZE_IDT(); 
-  terminal_initialize();
   write_to_terminal("----------------------------------------------",WHITE);
   write_to_terminal("Displaying Memory Info!: ",WHITE);
   write_to_terminal("----------------------------------------------",WHITE);
@@ -30,9 +32,9 @@ void kernel_main()
 
   uint8_t count = *(uint8_t*)ENTRY_COUNT;
   MemoryMapEntry* mem = (MemoryMapEntry*)MEMORMY_MAP;
+  uint64_t tot_mem =0;
 
   write_to_terminal("Entry Count is:%i",WHITE,count);
-  write_to_terminal("Struct size is:%i",WHITE,sizeof(MemoryMapEntry));
   for(int i=0;i<count;i++)
   {
   
@@ -41,9 +43,25 @@ void kernel_main()
     uint32_t type = mem[i].type;
     uint32_t acpi = mem[i].acpi;
 
-    write_to_terminal("Base:%llx, Length:%llx, Type:%u,ACPI:%u",WHITE,ba,len,type,acpi);
+    if(type==1) tot_mem += len;
+
+    //from the output notice  the large chunnk of memory starting from the 1MB mark :)
+    write_to_terminal("Base:%llx, Length:%llu, Type:%u,ACPI:%u",WHITE,ba,len,type,acpi);
   }
   write_to_terminal("----------------------------------------------",WHITE);
+  write_to_terminal("TOTAL USABLE MEMORY AVAILABLE IS: %llu MB",WHITE,tot_mem/(1024*1024));
+
+  BITMAP bmp1;
+  bitmap_init(&bmp1,800000,133038080);
+  uint32_t x;
+  if(bitmap_set_range(&bmp1,1,&x))
+  {
+    write_to_terminal("successfully allocated at address %llu",WHITE,x);
+  }
+  else
+  {
+    write_to_terminal("allocation failed!",WHITE);
+  }
 
   while(1)
   {

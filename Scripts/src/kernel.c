@@ -10,6 +10,12 @@
 
 volatile char* VGA_BUFFER = (volatile char*)0xB8000;
 
+typedef struct 
+{
+  uint64_t max_free_memory;
+  uint64_t max_base_addrs;
+} bitmap_data;
+
 typedef struct __attribute__((packed)) {
     uint64_t baseAddress;
     uint64_t length;
@@ -17,6 +23,12 @@ typedef struct __attribute__((packed)) {
     uint32_t acpi; // ACPI 3.0 extended attributes
 } MemoryMapEntry;
 //uint8_t count = *(uint8_t*)ENTRY_COUNT; Throws error
+
+typedef struct
+{
+  uint32_t strt_page;
+  uint32_t pages_allocated;
+} var;
 
 void kernel_main()
 {
@@ -29,11 +41,11 @@ void kernel_main()
   write_to_terminal("Displaying Memory Info!: ",WHITE);
   write_to_terminal("----------------------------------------------",WHITE);
 
+  bitmap_data b = {0,0};
 
   uint8_t count = *(uint8_t*)ENTRY_COUNT;
   MemoryMapEntry* mem = (MemoryMapEntry*)MEMORMY_MAP;
-  uint64_t tot_mem =0;
-
+  
   write_to_terminal("Entry Count is:%i",WHITE,count);
   for(int i=0;i<count;i++)
   {
@@ -43,30 +55,36 @@ void kernel_main()
     uint32_t type = mem[i].type;
     uint32_t acpi = mem[i].acpi;
 
-    if(type==1) tot_mem += len;
+    if(type==1 && b.max_free_memory<len)
+    {
+      b.max_free_memory = len;
+      b.max_base_addrs = ba;
+    }
 
     //from the output notice  the large chunnk of memory starting from the 1MB mark :)
     write_to_terminal("Base:%llx, Length:%llu, Type:%u,ACPI:%u",WHITE,ba,len,type,acpi);
   }
-  write_to_terminal("----------------------------------------------",WHITE);
-  write_to_terminal("TOTAL USABLE MEMORY AVAILABLE IS: %llu MB",WHITE,tot_mem/(1024*1024));
-  uint64_t* pntr = (uint64_t*)100000; //casting something to a pointer treats it as a memory address which points to a specifi datatype
-  write_to_terminal("Base Address is %llx",WHITE,*pntr);
 
-  BITMAP bmp1;
-  bitmap_init(&bmp1,0x100000,133038080); //MUST PASS The base address as hexadecimal not decimal!
-  uint32_t x;
-  if(bitmap_set_range(&bmp1,1,&x))
+  BITMAP bmp;
+  bitmap_init(&bmp,b.max_base_addrs,b.max_free_memory);
+  var x;
+  
+  if(bitmap_set_range(&bmp,20,&x.strt_page))
   {
-    write_to_terminal("successfully allocated at address %u",WHITE,x);
+    x.pages_allocated = 20;
+    write_to_terminal("Allocated at:%u and len:%u",WHITE,x.strt_page,x.pages_allocated);
   }
-  else
+  else write_to_terminal("Allocation Failed!",WHITE);
+
+  bitmap_unset_range(&bmp,x.strt_page,x.pages_allocated);
+
+  var y;
+  if(bitmap_set_range(&bmp,20,&y.strt_page))
   {
-    write_to_terminal("allocation failed!",WHITE);
+    y.pages_allocated = 20;
+    write_to_terminal("Allocated at:%u and len:%u",WHITE,y.strt_page,y.pages_allocated);
   }
-  uint32_t y;
-  bitmap_set_range(&bmp1,1,&y);
-  write_to_terminal("allocated at %u",WHITE,y);
+  else write_to_terminal("Allocation Failed!",WHITE);
 
   while(1)
   {

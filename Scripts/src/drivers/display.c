@@ -20,7 +20,20 @@ size_t cursor = 0;
 
 void scroll()
 {
-  terminal_initialize();
+  int p1 = 0;
+  int p2 = VGA_WIDTH;
+  while(p2<VGA_HEIGHT*VGA_WIDTH)
+  {
+    terminal_buffer[p1++] = terminal_buffer[p2++];
+  }
+  while(p1<VGA_HEIGHT*VGA_WIDTH)
+  {
+      terminal_buffer[p1++] = vga_entry(' ',vga_entry_color(terminal_color,terminal_color));
+  }
+
+  cur_row = VGA_HEIGHT-1;
+  cur_column = 0;
+  cursor = cur_row*cur_column;
 }
 
 void putc(const char c)

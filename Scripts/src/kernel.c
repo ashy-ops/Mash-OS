@@ -3,6 +3,7 @@
 #include "idt.h"
 #include "display.h"
 #include "bitmap.h"
+#include "debug.h"
 
 #define ENTRY_COUNT 0x90000
 #define MEMORMY_MAP 0x90010
@@ -86,6 +87,8 @@ void kernel_main()
   }
   else write_to_terminal("Allocation Failed!",WHITE);
 
+
+  debug_interrupts();
   while(1)
   {
     

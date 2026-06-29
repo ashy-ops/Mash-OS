@@ -256,6 +256,8 @@ extern void __attribute((cdecl)) ISR252();
 extern void __attribute((cdecl)) ISR253();
 extern void __attribute((cdecl)) ISR254();
 extern void __attribute((cdecl)) ISR255();
+
+
 void isr_initialize_gates()
 {
   idt_set_gate(0, (uint32_t)ISR0 & 0xFFFF, 0x08, IDT_FLAG_DPL_0 | IDT_FLAG_INTERRUPT_GATE_32BIT , ((uint32_t)ISR0 >> 16) & 0xFFFF);

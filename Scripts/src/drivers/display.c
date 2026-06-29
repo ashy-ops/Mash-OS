@@ -51,6 +51,8 @@ void puts(const char* s)
 
 void terminal_initialize(void)
 {
+  cur_row = 0;
+  cur_column = 0;
 
   for(size_t y = 0; y<VGA_HEIGHT; y++)
   {

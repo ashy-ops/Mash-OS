@@ -3,11 +3,15 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdarg.h>
+#include "io.h"
 
 
 #define VGA_WIDTH   80
 #define VGA_HEIGHT  25
 #define VGA_MEMORY  0xB8000 
+
+#define VGA_CTRL_REGISTER 0x3D4
+#define VGA_DATA_REGISTER 0x3D5
 
 #define MAX_BUFFER_SIZE 80*25
 #define STATE_NORMAL 0
@@ -27,7 +31,6 @@ extern size_t cur_row;
 extern size_t cur_column;
 extern uint8_t terminal_color;
 extern uint8_t text_color;
-extern size_t cursor;
 
 enum vga_color {
 	BLACK = 0,
@@ -52,12 +55,18 @@ enum vga_color {
 
 
 
-
+void new_line();
 void putc(const char c);
 void puts(const char* s);
 void print_num(va_list* args,uint8_t len,bool sign,uint8_t radix);
 
+void move_cursor_left();
+void move_cursor_right();
+
+void update_text_shell(uint8_t mode);
+
 void scroll();
 void terminal_initialize(void);
 void write_to_terminal(const char* str,enum vga_color color, ...);
-
+void updae_cursor();
+void clear_screen();

@@ -4,6 +4,7 @@
 #include "display.h"
 #include "bitmap.h"
 #include "debug.h"
+#include "keyboard.h"
 
 #define ENTRY_COUNT 0x90000
 #define MEMORMY_MAP 0x90010
@@ -38,16 +39,12 @@ void kernel_main()
   terminal_initialize();
   pic_remap();
   idt_initialize(); 
-  write_to_terminal("----------------------------------------------",WHITE);
-  write_to_terminal("Displaying Memory Info!: ",WHITE);
-  write_to_terminal("----------------------------------------------",WHITE);
 
   memory_region_t b = {0,0};
-
   uint8_t count = *(uint8_t*)ENTRY_COUNT;
   memory_map_entry_t* mem = (memory_map_entry_t*)MEMORMY_MAP;
-  
-  write_to_terminal("Entry Count is:%i",WHITE,count);
+
+  //write_to_terminal("Entry Count is:%i",WHITE,count);
   for(int i=0;i<count;i++)
   {
 
@@ -63,11 +60,12 @@ void kernel_main()
     }
 
     //from the output notice  the large chunnk of memory starting from the 1MB mark :)
-    write_to_terminal("Base:%llx, Length:%llu, Type:%u,ACPI:%u",WHITE,ba,len,type,acpi);
+    //write_to_terminal("Base:%llx, Length:%llu, Type:%u,ACPI:%u",WHITE,ba,len,type,acpi);
   }
 
   bitmap_t bmp;
   bitmap_init(&bmp,b.max_base_addr,b.max_free_memory);
+/*
   page_allocation_t x;
   
   if(bitmap_set_range(&bmp,20,&x.start_page))
@@ -86,9 +84,8 @@ void kernel_main()
     write_to_terminal("Allocated at:%u and len:%u",WHITE,y.start_page,y.pages_allocated);
   }
   else write_to_terminal("Allocation Failed!",WHITE);
-
-
-  debug_interrupts();
+*/
+  initialize_keyboard();
   while(1)
   {
     

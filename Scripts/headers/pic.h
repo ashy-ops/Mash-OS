@@ -1,4 +1,7 @@
 #pragma once
+#include "display.h"
+#include "io.h"
+
 // Hardware Port Defines
 #define PIC1_COMMAND 0x20
 #define PIC1_DATA    0x21

@@ -1,5 +1,9 @@
 #pragma once
 #include <stdint.h>
+#include "io.h"
+#include "isr_setup.h"
+#include "display.h"
+#include "idt.h"
 
 typedef struct {
     uint32_t ds;                                          // Pushed by us

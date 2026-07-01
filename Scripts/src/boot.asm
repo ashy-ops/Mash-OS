@@ -65,7 +65,7 @@ load_e820:
   ;Stores the value in dx register
   
   mov bx,dx
-  add bx, 18*1  ;1seconds approx
+  add bx, 18*3  ;1seconds approx
 
 
 

@@ -1,9 +1,4 @@
-#include "idt.h"
 #include "isr.h"
-#include "io.h"
-#include "isr_setup.h"
-#include "display.h"
-
 
 isr_handler_t handlers[256];     //function pointer table
 
@@ -32,7 +27,7 @@ void isr_register_handler(int interrupt, isr_handler_t handler)
 void default_handler(registers_t* reg)
 {
   uint32_t interrupt = reg->interrupt;
-  write_to_terminal("Unhandeled Ineterrupt: %d",WHITE,interrupt);
+  write_to_terminal("Unhandeled Ineterrupt: %d\n",WHITE,interrupt);
 }
 
 void __attribute((cdecl)) isr_handler(registers_t* regs) //called by the assembly code

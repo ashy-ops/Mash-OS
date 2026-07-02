@@ -28,6 +28,16 @@ void UPDATE_SCREEN()
     //first cast the address as a pointer to a uint16_t, then add i and then dereference
     //Note that [i] does automatic dereferncing! 
   }
+
+  //update hardware cursor position
+
+  //sending high byte
+  outb(VGA_CTRL_REGISTER, 0x0E);
+  outb(VGA_DATA_REGISTER, (uint8_t)((cursor_write >> 8) & 0xFF));
+
+  //sending low byte
+  outb(VGA_CTRL_REGISTER, 0x0F);
+  outb(VGA_DATA_REGISTER, (uint8_t)(cursor_write & 0xFF));
 }
 
 void SCROLL(void)
